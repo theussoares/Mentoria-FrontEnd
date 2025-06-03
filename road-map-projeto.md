@@ -42,8 +42,8 @@ Step 2.2: Páginas de Autenticação
 
 Step 2.3: Componentes de Auth
 
- Formulário de Login
- Botões Sociais (Google, GitHub)
+ Formulário de Login 
+ Botões Sociais (Google)
  Formulário de Registro
  Componentes de validação
 
