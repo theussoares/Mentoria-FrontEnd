@@ -2,10 +2,11 @@
 import { ref } from 'vue';
 import {
   signInWithEmailAndPassword,
-  GoogleAuthProvider,       // Já estava importado
-  // GithubAuthProvider,    // Comentado
-  signInWithPopup,          // Nova importação
-  getAdditionalUserInfo,    // Nova importação
+  GoogleAuthProvider,
+  signInWithPopup,
+  getAdditionalUserInfo,
+  createUserWithEmailAndPassword, // Nova importação
+  updateProfile,                // Nova importação
   type UserCredential,
   type AuthError
 } from 'firebase/auth';
@@ -15,7 +16,7 @@ export interface AuthUser {
   id: string;
   name: string | null;
   email: string | null;
-  avatar: string; // Pode vir diretamente do Google
+  avatar: string;
   provider: 'email' | 'google' | 'github';
   isNewUser?: boolean;
 }
@@ -36,7 +37,7 @@ export const useAuth = () => {
         id: firebaseUser.uid,
         name: firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'Usuário',
         email: firebaseUser.email,
-        avatar: firebaseUser.photoURL || '/img/default-avatar.png',
+        avatar: firebaseUser.photoURL || '', // Substitua pelo caminho do seu avatar padrão
         provider: 'email',
       };
     } catch (e: any) {
@@ -66,10 +67,52 @@ export const useAuth = () => {
     }
   };
 
-  // Registro com Email/Senha (a ser implementado)
-  const registerWithEmail = async (email: string, password: string, name: string) => { /* ... */ };
+  // Registro com Email/Senha
+  const registerWithEmail = async (email: string, password: string, name: string) => {
+    loading.value = true;
+    error.value = null;
+    try {
+      const userCredential: UserCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const firebaseUser = userCredential.user;
 
-  // Login com Google
+      // Atualiza o perfil do usuário com o nome fornecido
+      await updateProfile(firebaseUser, { displayName: name });
+
+      user.value = {
+        id: firebaseUser.uid,
+        name: firebaseUser.displayName || name, // Usa o nome atualizado ou o fornecido
+        email: firebaseUser.email,
+        avatar: firebaseUser.photoURL || '/img/default-avatar.png', // Avatar padrão
+        provider: 'email',
+        isNewUser: true, // Definitivamente um novo usuário
+      };
+
+      // TODO: Considerar criar o registro do estudante no Firestore aqui ou em um passo de onboarding
+      // Ex: await createStudentInFirestore(firebaseUser.uid, name, email, firebaseUser.photoURL);
+
+    } catch (e: any) {
+      const authError = e as AuthError;
+      console.error("Firebase Auth Error Details (registerWithEmail):", authError);
+      switch (authError.code) {
+        case 'auth/email-already-in-use':
+          error.value = 'Este endereço de e-mail já está em uso por outra conta.';
+          break;
+        case 'auth/invalid-email':
+          error.value = 'O formato do e-mail fornecido é inválido.';
+          break;
+        case 'auth/weak-password':
+          error.value = 'A senha é muito fraca. Por favor, use uma senha mais forte.';
+          break;
+        default:
+          console.error("Unhandled Firebase Auth Error Code (registerWithEmail):", authError.code);
+          error.value = 'Ocorreu um erro ao tentar registrar. Tente novamente.';
+      }
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  // Login com Google (implementado anteriormente)
   const loginWithGoogle = async () => {
     loading.value = true;
     error.value = null;
@@ -82,16 +125,11 @@ export const useAuth = () => {
         id: firebaseUser.uid,
         name: firebaseUser.displayName,
         email: firebaseUser.email,
-        avatar: firebaseUser.photoURL || '/img/default-avatar.png', // Google geralmente fornece photoURL
+        avatar: firebaseUser.photoURL || '/img/default-avatar.png',
         provider: 'google',
         isNewUser: additionalUserInfo?.isNewUser || false,
       };
-
-      // Opcional: Se for um novo usuário, você pode querer salvar informações adicionais no Firestore aqui.
-      // if (additionalUserInfo?.isNewUser) {
-      //   // Lógica para criar um novo documento de estudante no Firestore
-      // }
-
+      // TODO: Considerar criar o registro do estudante no Firestore se for um novo usuário
     } catch (e: any) {
       const authError = e as AuthError;
       console.error("Firebase Auth Error Details (loginWithGoogle):", authError);
@@ -101,7 +139,6 @@ export const useAuth = () => {
           break;
         case 'auth/account-exists-with-different-credential':
           error.value = 'Já existe uma conta com este e-mail, mas com um método de login diferente.';
-          // Você pode querer fornecer uma forma de vincular as contas aqui, se necessário.
           break;
         case 'auth/cancelled-popup-request':
           error.value = 'Múltiplas tentativas de abrir o pop-up foram feitas. Por favor, tente novamente.';
@@ -128,7 +165,6 @@ export const useAuth = () => {
     loginWithEmail,
     registerWithEmail,
     loginWithGoogle,
-    // loginWithGithub, // Comentado
     logout,
     resetPassword,
   };

@@ -107,6 +107,12 @@
                     <a href="#" class="text-sm text-blue-600 hover:text-blue-800 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded inline-block p-2">
                         Esqueceu sua senha?
                     </a>
+                    <p class="text-sm text-gray-600">
+                        Não tem uma conta? 
+                        <a href="/register" class="text-blue-600 hover:text-blue-800 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded inline-block p-1">
+                            Criar conta
+                        </a>
+                    </p>
                 </footer>
             </section>
         </div>
