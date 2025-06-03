@@ -35,8 +35,8 @@ Step 2.1: Composables de Auth - ok
 
 Step 2.2: Páginas de Autenticação
 
- Página de Login (/auth/login) 
- Página de Registro (/auth/register)
+ Página de Login (/auth/login) - ok
+ Página de Registro (/auth/register) - ok
  Página de Recuperar Senha (/auth/forgot-password)
  Página de Verificação de Email (/auth/verify-email)
 
