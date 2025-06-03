@@ -1,75 +1,122 @@
 <template>
   <div
     class="min-h-screen bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 text-gray-800 font-sans p-5"
+    role="main"
   >
     <div class="container mx-auto">
       <header class="text-center text-white mb-8 py-6">
-        <h1 class="text-4xl font-bold mb-2 text-shadow">🚀 Mentoria Web Dev</h1>
+        <h1 class="text-4xl font-bold mb-2 text-shadow">
+          🚀 Mentoria Frontend
+        </h1>
         <p class="text-lg opacity-90 text-shadow-sm">
-          Sistema de Gamificação - HTML, CSS & JavaScript
+          HTML, CSS & JavaScript
         </p>
       </header>
 
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <StudentProfileCard
-          :student="currentUserProfileData"
-          @add-points="addPointsToCurrentUserForExercise"
-          class="lg:col-span-1"
-        />
-        <UiCard class="lg:col-span-1">
-          <template #header>
-            <h3 class="text-xl font-semibold text-gray-700 text-center mb-4">
-              🏆 Conquistas
-            </h3>
-          </template>
-          <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
-            <BadgeItem
-              v-for="badge in studentBadgesDisplay"
-              :key="badge.id"
-              :badge="badge"
-              @show-info="showBadgeInfo"
-            />
-          </div>
-        </UiCard>
-        <UiCard class="lg:col-span-1">
-          <template #header>
-            <h3 class="text-xl font-semibold text-gray-700 text-center mb-4">
-              🎯 Ranking
-            </h3>
-          </template>
-          <div class="space-y-2 max-h-96 overflow-y-auto">
-            <LeaderboardItem
-              v-for="(student, index) in rankedStudents"
-              :key="student.id"
-              :student="student"
-              :rank="index + 1"
-            />
-            <p v-if="!rankedStudents.length" class="text-center text-gray-500">
-              Ninguém no ranking ainda.
-            </p>
-          </div>
-        </UiCard>
-      </div>
-
-      <div class="mt-10">
-        <h2
-          class="text-3xl font-semibold text-white mb-6 text-center text-shadow"
+      <main>
+        <section
+          class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8"
+          aria-label="Perfil e estatísticas do estudante"
         >
-          Desafios Ativos
-        </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <ChallengeCardDisplay
-            v-for="challenge in activeChallenges"
-            :key="challenge.id"
-            :challenge="challenge"
-            :student-status="getStudentChallengeStatus(challenge.id)"
-            @submit-challenge="handleSubmitChallenge"
+          <StudentProfileCard
+            :student="currentUserProfileData"
+            @add-points="addPointsToCurrentUserForExercise"
+            class="lg:col-span-1"
           />
-        </div>
-        <p v-if="!activeChallenges.length" class="text-center text-white mt-4">
-          Nenhum desafio disponível no momento.
-        </p>
-      </div>
+
+          <section aria-labelledby="achievements-title">
+            <UiCard class="lg:col-span-1">
+              <template #header>
+                <h2
+                  id="achievements-title"
+                  class="text-xl font-semibold text-gray-700 text-center mb-4"
+                >
+                  🏆 Conquistas
+                </h2>
+              </template>
+              <div
+                class="grid grid-cols-3 sm:grid-cols-4 gap-3"
+                role="list"
+                aria-label="Lista de conquistas disponíveis"
+              >
+                <BadgeItem
+                  v-for="badge in studentBadgesDisplay"
+                  :key="badge.id"
+                  :badge="badge"
+                  @show-info="showBadgeInfo"
+                  role="listitem"
+                />
+              </div>
+            </UiCard>
+          </section>
+
+          <section aria-labelledby="ranking-title">
+            <UiCard class="lg:col-span-1">
+              <template #header>
+                <h2
+                  id="ranking-title"
+                  class="text-xl font-semibold text-gray-700 text-center mb-4"
+                >
+                  🎯 Ranking
+                </h2>
+              </template>
+              <div
+                class="space-y-2 max-h-96 overflow-y-auto leaderboard"
+                role="list"
+                aria-label="Ranking de estudantes por pontuação"
+                tabindex="0"
+              >
+                <LeaderboardItem
+                  v-for="(student, index) in rankedStudents"
+                  :key="student.id"
+                  :student="student"
+                  :rank="index + 1"
+                  role="listitem"
+                />
+                <p
+                  v-if="!rankedStudents.length"
+                  class="text-center text-gray-500"
+                  role="status"
+                  aria-live="polite"
+                >
+                  Ninguém no ranking ainda.
+                </p>
+              </div>
+            </UiCard>
+          </section>
+        </section>
+
+        <section class="mt-10" aria-labelledby="challenges-title">
+          <h2
+            id="challenges-title"
+            class="text-3xl font-semibold text-white mb-6 text-center text-shadow"
+          >
+            Desafios Ativos
+          </h2>
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            role="list"
+            aria-label="Lista de desafios disponíveis"
+          >
+            <ChallengeCardDisplay
+              v-for="challenge in activeChallenges"
+              :key="challenge.id"
+              :challenge="challenge"
+              :student-status="getStudentChallengeStatus(challenge.id)"
+              @submit-challenge="handleSubmitChallenge"
+              role="listitem"
+            />
+          </div>
+          <p
+            v-if="!activeChallenges.length"
+            class="text-center text-white mt-4"
+            role="status"
+            aria-live="polite"
+          >
+            Nenhum desafio disponível no momento.
+          </p>
+        </section>
+      </main>
     </div>
   </div>
 </template>

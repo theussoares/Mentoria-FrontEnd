@@ -1,3 +1,6 @@
+Parei na contrução, cacheamento e definição do perfil - e depois tirar mock da index
+
+
 🗺️ ROADMAP COMPLETO - MENTORIA FRONTEND
 📋 FASE 1: FUNDAÇÃO E SETUP
 Objetivo: Preparar toda a base técnica
@@ -42,7 +45,7 @@ Step 2.2: Páginas de Autenticação
 
 Step 2.3: Componentes de Auth
 
- Formulário de Login 
+ Formulário de Login
  Botões Sociais (Google)
  Formulário de Registro
  Componentes de validação
@@ -50,8 +53,8 @@ Step 2.3: Componentes de Auth
 Step 2.4: Middleware e Guards
 
  Middleware de autenticação
- Proteção de rotas
- Redirecionamentos automáticos
+ Proteção de rotas - ok
+ Redirecionamentos automáticos - ok
 
 📋 FASE 3: SISTEMA DE DADOS E STORES
 Objetivo: Estruturar gerenciamento de estado
