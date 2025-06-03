@@ -114,9 +114,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick } from 'vue';
+import { ref, computed, watch, nextTick, onUnmounted } from 'vue';
 import { useAuth } from '../composables/useAuth';
 import { useRouter } from 'vue-router';
+import { isValidEmailFormat, isNotEmpty, validatePassword } from '../utils/validators';
 
 const router = useRouter();
 
@@ -135,23 +136,11 @@ const submitAttempts = ref(0);
 // Auth composable
 const { loginWithEmail, loginWithGoogle, loading, error: authApiError, user } = useAuth();
 
-// Enhanced email validation
-const isValidEmailFormat = (emailValue: string): boolean => {
-    if (!emailValue) return true;
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return emailRegex.test(emailValue.trim());
-};
-
-// Enhanced password validation
-const isValidPassword = (passwordValue: string): boolean => {
-    return !!passwordValue && passwordValue.length >= 6;
-};
-
 // Field validation functions
 const validateEmailField = (): boolean => {
     const trimmedEmail = email.value.trim();
     
-    if (!trimmedEmail) {
+    if (!isNotEmpty(trimmedEmail)) {
         emailError.value = 'O campo de e-mail é obrigatório.';
         return false;
     }
@@ -166,13 +155,10 @@ const validateEmailField = (): boolean => {
 };
 
 const validatePasswordField = (): boolean => {
-    if (!password.value) {
-        passwordError.value = 'O campo de senha é obrigatório.';
-        return false;
-    }
+    const passwordValidation = validatePassword(password.value);
     
-    if (!isValidPassword(password.value)) {
-        passwordError.value = 'A senha deve ter pelo menos 6 caracteres.';
+    if (passwordValidation !== true) {
+        passwordError.value = passwordValidation;
         return false;
     }
     
@@ -369,7 +355,6 @@ defineExpose({
         authApiError.value = null;
     }
 });
-
 </script>
 
 <style scoped>

@@ -1,7 +1,7 @@
 🗺️ ROADMAP COMPLETO - MENTORIA FRONTEND
 📋 FASE 1: FUNDAÇÃO E SETUP
 Objetivo: Preparar toda a base técnica
-Step 1.1: Setup Inicial do Projeto
+Step 1.1: Setup Inicial do Projeto - ok
 
  Criar projeto Nuxt 3 com TypeScript
  Configurar Tailwind CSS
@@ -9,7 +9,7 @@ Step 1.1: Setup Inicial do Projeto
  Configurar ESLint + Prettier
  Estrutura de pastas completa
 
-Step 1.2: Configuração Firebase
+Step 1.2: Configuração Firebase - ok
 
  Criar projeto Firebase
  Configurar Authentication (Email, Google, GitHub)
@@ -17,7 +17,7 @@ Step 1.2: Configuração Firebase
  Configurar regras de segurança básicas
  Arquivo de configuração Firebase
 
-Step 1.3: Types e Interfaces
+Step 1.3: Types e Interfaces - ok
 
  Definir todas as interfaces TypeScript
  Criar tipos para Student, Badge, Challenge, etc.
@@ -25,8 +25,8 @@ Step 1.3: Types e Interfaces
  Constantes do sistema (níveis, badges, etc.)
 
 📋 FASE 2: SISTEMA DE AUTENTICAÇÃO
-Objetivo: Implementar login completo
-Step 2.1: Composables de Auth
+Objetivo: Implementar login completo - ok
+Step 2.1: Composables de Auth - ok
 
  useAuth composable completo
  Integração com Firebase Auth
@@ -35,7 +35,7 @@ Step 2.1: Composables de Auth
 
 Step 2.2: Páginas de Autenticação
 
- Página de Login (/auth/login)
+ Página de Login (/auth/login) 
  Página de Registro (/auth/register)
  Página de Recuperar Senha (/auth/forgot-password)
  Página de Verificação de Email (/auth/verify-email)
